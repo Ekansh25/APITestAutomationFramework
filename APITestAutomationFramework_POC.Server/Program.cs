@@ -1,8 +1,15 @@
+using APITestAutomationFramework_POC.Server.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+// Register SchemaService with dependency injection
+builder.Services.AddScoped<ISchemaService, SchemaService>();
+
 builder.Services.AddControllers();
+// Register the IHttpClientFactory service
+builder.Services.AddHttpClient();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
