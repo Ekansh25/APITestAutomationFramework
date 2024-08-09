@@ -4,7 +4,7 @@ import { IInterfaceProps } from './LandingPage'
 
 const ExecuteTestCase = (props:IInterfaceProps) => {
     return (
-        props.option=="Execute"?<div>ExecuteTestCase</div>:<></>
+        props.option==""?<div>ExecuteTestCase</div>:<></>
     )
 }
 

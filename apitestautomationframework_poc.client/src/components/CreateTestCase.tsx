@@ -12,15 +12,28 @@ interface ITypeResponse {
 }
 
 interface ITypeObject {
-    schema: ITypeResponse
+    schema: ITypeResponse;
+    expectedResponse: object;
 }
 
-const CreateTestCase = (props:IInterfaceProps) => {
+interface ITypeTestData {
+    statusCode: number;
+    isStatusCodeValid: boolean;
+    responseBody: object;
+    isResponseBodyValid: boolean;
+    isResponseBodyStructureValid: boolean;
+    errorMessages: string[];
+    isResponseDataMatching: boolean;
+    mismatchDetails: object;
+}
+
+const CreateTestCase = (props: IInterfaceProps) => {
     const [selectedType, setSelectedType] = useState<string>("GET");
     const [colorClass, setColorClass] = useState<string>("");
     const [url, setUrl] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [format, setFormat] = useState<ITypeObject | null>(null);
+    const [testData, setTestData] = useState<ITypeTestData | null>(null);
     //const url = "http://localhost:5066/WeatherForecast/pokemon-list";
 
     useEffect(() => {
@@ -43,6 +56,11 @@ const CreateTestCase = (props:IInterfaceProps) => {
     }, [selectedType])
 
     async function populateAPIResponse() {
+        if(props.option == "Create") populateAPI();
+        if(props.option == "Execute") populateAPITest();
+    }
+
+    async function populateAPI() {
         setIsLoading(true);
         try {
             const response = await fetch('APITest/create-schema', {
@@ -55,6 +73,56 @@ const CreateTestCase = (props:IInterfaceProps) => {
 
             const data: ITypeObject = await response.json();
             setFormat(data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
+    const schema = {
+        "count": {
+            "type": "integer"
+        },
+        "next": {
+            "type": "string"
+        },
+        "previous": {
+            "type": "null"
+        },
+        "results": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "url": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "name",
+                    "url"
+                ]
+            }
+        }
+    };
+
+    async function populateAPITest() {
+        setIsLoading(true);
+        try {
+            const response = await fetch('APITest/run-tests', {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    url: `${url}`,
+                    schema: schema
+                }),
+            });
+
+            const data: ITypeTestData = await response.json();
+            setTestData(data);
         } catch (error) {
             console.error('Error fetching data:', error);
         } finally {
@@ -133,16 +201,38 @@ const CreateTestCase = (props:IInterfaceProps) => {
         <div className='h-[70vh] flex'>
             <div className='bg-indigo-100 w-1/2 mr-1 rounded-md'>
                 <h1 className='text-1xl font-bold leading-7 text-gray-900 m-1'>Response Body</h1>
-                <div id="response-body-cont" className='bg-slate-100 mx-5 rounded-md h-[62vh] p-4'></div>
+                <div id="response-body-cont" className='bg-slate-100 mx-5 rounded-md h-[62vh] p-4 overflow-y-auto text-left'>
+                    {isLoading ? (
+                        <p>Loading...</p>
+                    ) : (
+                        format && (
+                            props.option=="Create"?
+                            <pre>{JSON.stringify(format.expectedResponse, null, 2)}</pre>
+                            :
+                            <pre>{JSON.stringify(testData?.responseBody, null, 2)}</pre>
+                        )
+                    )}
+                </div>
             </div>
             <div className='bg-indigo-100 w-1/2 ml-1 rounded-md'>
-                <h1 className='text-1xl font-bold leading-7 text-gray-900 m-1'>Format</h1>
+                <h1 className='text-1xl font-bold leading-7 text-gray-900 m-1'>{props.option=="Execute"?"Test Results":"Format"}</h1>
                 <div id="response-format-cont" className='bg-slate-100 mx-5 rounded-md h-[62vh] p-4 overflow-y-auto text-left'>
                     {isLoading ? (
                         <p>Loading...</p>
                     ) : (
                         format && (
-                            <pre>{JSON.stringify(format.schema.properties, null, 2)}</pre>
+                            props.option=="Create"?
+                            <pre>{JSON.stringify(format.schema, null, 2)}</pre>
+                            :
+                            <>
+                                <pre>{JSON.stringify(testData?.statusCode, null, 2)}</pre>
+                                <pre>{JSON.stringify(testData?.isStatusCodeValid, null, 2)}</pre>
+                                <pre>{JSON.stringify(testData?.errorMessages, null, 2)}</pre>
+                                <pre>{JSON.stringify(testData?.mismatchDetails, null, 2)}</pre>
+                                <pre>{JSON.stringify(testData?.isResponseBodyValid, null, 2)}</pre>
+                                <pre>{JSON.stringify(testData?.isResponseDataMatching, null, 2)}</pre>
+                                <pre>{JSON.stringify(testData?.isResponseBodyStructureValid, null, 2)}</pre>
+                            </>
                         )
                     )}
                 </div>
@@ -150,14 +240,13 @@ const CreateTestCase = (props:IInterfaceProps) => {
         </div>;
 
     return (
-        props.option=="Create"?
         <>
             <div className='flex justify-center items-center h-[10vh]'>
                 {dropdown}
                 {input}
             </div>
             {display}
-        </>:<></>
+        </>
     )
 }
 
