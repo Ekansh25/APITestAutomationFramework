@@ -76,8 +76,29 @@ namespace APITestAutomationFramework_POC.Server.Services
 
             // Use JsonDiffPatch to compare the actual response with the expected response
             var jdp = new JsonDiffPatch();
-            var expectedJObject = JObject.Parse(expectedResponse);
-            var actualJObject = JObject.Parse(responseBody);
+            JToken expectedJObject;
+            JToken actualJObject;
+
+            // Determine if the expected response is an array or an object
+            if (expectedResponse.Trim().StartsWith("["))
+            {
+                expectedJObject = JArray.Parse(expectedResponse);
+            }
+            else
+            {
+                expectedJObject = JObject.Parse(expectedResponse);
+            }
+
+            // Determine if the actual response is an array or an object
+            if (responseBody.Trim().StartsWith("["))
+            {
+                actualJObject = JArray.Parse(responseBody);
+            }
+            else
+            {
+                actualJObject = JObject.Parse(responseBody);
+            }
+
 
             // Get the differences
             var diff = jdp.Diff(expectedJObject, actualJObject);
@@ -94,8 +115,9 @@ namespace APITestAutomationFramework_POC.Server.Services
                 IsResponseBodyStructureValid = isValid,
                 ErrorMessages = errorMessages,
                 IsResponseDataMatching = isMatch,
-                MismatchDetails = JsonDocument.Parse(diff?.ToString()) // The differences, if any
+                MismatchDetails = diff != null ? JsonDocument.Parse(diff.ToString()) : null
             };
         }
+    
     }
 }
