@@ -42,7 +42,7 @@ namespace APITestAutomationFramework_POC.Server.Controllers
                 results = new Object[]
                 {
                     new { name = "bulbasaur", url = "https://pokeapi.co/api/v2/pokemon/1/" },
-                    new { name = 32, url = "https://pokeapi.co/api/v2/pokemon/2/" },
+                    new { name = "Kestral", url = "https://pokeapi.co/api/v2/pokemon/2/" },
                     new { name = "venusaur", url = "https://pokeapi.co/api/v2/pokemon/3/" },
                     new { name = "charmander", url = "https://pokeapi.co/api/v2/pokemon/4/" },
                     new { name = "charmeleon", url = "https://pokeapi.co/api/v2/pokemon/5/" },
@@ -50,7 +50,7 @@ namespace APITestAutomationFramework_POC.Server.Controllers
                     new { name = "squirtle", url = "https://pokeapi.co/api/v2/pokemon/7/" },
                     new { name = "wartortle", url = "https://pokeapi.co/api/v2/pokemon/8/" },
                     new { name = "blastoise", url = "https://pokeapi.co/api/v2/pokemon/9/" },
-                    new { name = "caterpie", url = "https://pokeapi.co/api/v2/pokemon/10/" },
+                    new { name = "caterpie", url = "https://pokeapi.co/api/v2/pokemonGo/10/" },
                     new { name = "metapod", url = "https://pokeapi.co/api/v2/pokemon/11/" },
                     new { name = "butterfree", url = "https://pokeapi.co/api/v2/pokemon/12/" },
                     new { name = "weedle", url = "https://pokeapi.co/api/v2/pokemon/13/" },
