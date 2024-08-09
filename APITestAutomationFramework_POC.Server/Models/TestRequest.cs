@@ -3,9 +3,6 @@
     public class TestRequest
     {
         public string Url { get; set; }
-  
         public Object Schema { get; set; }
-
-        public Object ExpectedData { get; set; }
     }
 }
