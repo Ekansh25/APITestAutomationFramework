@@ -79,6 +79,7 @@ const CreateTestCase = (props: IInterfaceProps) => {
             setIsLoading(false);
         }
     }
+
     const schema = {
         "count": {
             "type": "integer"
@@ -205,7 +206,7 @@ const CreateTestCase = (props: IInterfaceProps) => {
                     {isLoading ? (
                         <p>Loading...</p>
                     ) : (
-                        format && (
+                        testData && format && (
                             props.option=="Create"?
                             <pre>{JSON.stringify(format.expectedResponse, null, 2)}</pre>
                             :
@@ -220,18 +221,18 @@ const CreateTestCase = (props: IInterfaceProps) => {
                     {isLoading ? (
                         <p>Loading...</p>
                     ) : (
-                        format && (
+                        testData && format && (
                             props.option=="Create"?
                             <pre>{JSON.stringify(format.schema, null, 2)}</pre>
                             :
                             <>
-                                <pre>{JSON.stringify(testData?.statusCode, null, 2)}</pre>
-                                <pre>{JSON.stringify(testData?.isStatusCodeValid, null, 2)}</pre>
-                                <pre>{JSON.stringify(testData?.errorMessages, null, 2)}</pre>
-                                <pre>{JSON.stringify(testData?.mismatchDetails, null, 2)}</pre>
-                                <pre>{JSON.stringify(testData?.isResponseBodyValid, null, 2)}</pre>
-                                <pre>{JSON.stringify(testData?.isResponseDataMatching, null, 2)}</pre>
-                                <pre>{JSON.stringify(testData?.isResponseBodyStructureValid, null, 2)}</pre>
+                                <pre>Status Code: {JSON.stringify(testData?.statusCode, null, 2)}</pre>
+                                <pre>Is Status Code Valid: {JSON.stringify(testData?.isStatusCodeValid, null, 2)}</pre>
+                                <pre>Error Messages: {JSON.stringify(testData?.errorMessages, null, 2)}</pre>
+                                <pre>Miss Matched: {JSON.stringify(testData?.mismatchDetails, null, 2)}</pre>
+                                <pre>Is Response Body Valid: {JSON.stringify(testData?.isResponseBodyValid, null, 2)}</pre>
+                                <pre>Is Response Data Match: {JSON.stringify(testData?.isResponseDataMatching, null, 2)}</pre>
+                                <pre>Is Response Body structure Valid: {JSON.stringify(testData?.isResponseBodyStructureValid, null, 2)}</pre>
                             </>
                         )
                     )}
@@ -240,13 +241,14 @@ const CreateTestCase = (props: IInterfaceProps) => {
         </div>;
 
     return (
+        props.option != "Default"?
         <>
             <div className='flex justify-center items-center h-[10vh]'>
                 {dropdown}
                 {input}
             </div>
             {display}
-        </>
+        </>:<></>
     )
 }
 
