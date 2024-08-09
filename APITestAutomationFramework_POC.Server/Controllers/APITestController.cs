@@ -4,6 +4,7 @@ using APITestAutomationFramework_POC.Server.Services;
 using Newtonsoft.Json.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.Text.Json;
 
 
 namespace APITestAutomationFramework_POC.Server.Controllers
@@ -22,12 +23,8 @@ namespace APITestAutomationFramework_POC.Server.Controllers
         [HttpPost("create-schema")]
         public async Task<IActionResult> CreateSchema([FromBody] CreateSchemaRequest request)
         {
-            var schema = await _schemaService.GenerateSchemaFromUrl(request.Url);
-            if (schema == null)
-            {
-                return BadRequest("Failed to generate schema.");
-            }
-            return Ok(schema.ToString());
+            CreateTestCaseResponse createTestCaseResponse = await _schemaService.GenerateSchemaFromUrl(request.Url);
+            return Ok(createTestCaseResponse);
         }
 
         [HttpPost("run-tests")]
@@ -43,12 +40,12 @@ namespace APITestAutomationFramework_POC.Server.Controllers
             {
                 schemaObject = JObject.Parse(request.Schema.ToString());
             }
-            catch (JsonException ex)
+            catch (Exception ex)
             {
                 return BadRequest($"Invalid schema: {ex.Message}");
             }
 
-            var testResults = await _schemaService.RunTests(request.Url, schemaObject, request.ExpectedData);
+            var testResults = await _schemaService.RunTests(request.Url, schemaObject);
             return Ok(testResults);
         }
     }

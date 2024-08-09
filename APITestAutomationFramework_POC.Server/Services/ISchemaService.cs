@@ -7,7 +7,7 @@ namespace APITestAutomationFramework_POC.Server.Services
 {
     public interface ISchemaService
     {
-        Task<JSchema> GenerateSchemaFromUrl(string url);
-        Task<TestResults> RunTests(string url, JObject schemaObject, Object ExpectedData);
+        Task<CreateTestCaseResponse> GenerateSchemaFromUrl(string url);
+        Task<TestResults> RunTests(string url, JObject schemaObject);
     }
 }
