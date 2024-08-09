@@ -1,6 +1,7 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDownIcon, ArrowRightCircleIcon } from '@heroicons/react/20/solid'
 import { useEffect, useState } from 'react';
+import { IInterfaceProps } from './LandingPage';
 
 //type Props = {}
 
@@ -10,12 +11,17 @@ interface ITypeResponse {
     required: string[];
 }
 
-const CreateTestCase = () => {
+interface ITypeObject {
+    schema: ITypeResponse
+}
+
+const CreateTestCase = (props:IInterfaceProps) => {
     const [selectedType, setSelectedType] = useState<string>("GET");
     const [colorClass, setColorClass] = useState<string>("");
+    const [url, setUrl] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
-
-    const [response, setResponse] = useState<ITypeResponse>();    
+    const [format, setFormat] = useState<ITypeObject | null>(null);
+    //const url = "http://localhost:5066/WeatherForecast/pokemon-list";
 
     useEffect(() => {
         switch (selectedType) {
@@ -35,6 +41,26 @@ const CreateTestCase = () => {
                 setColorClass(" text-gray-900 ")
         }
     }, [selectedType])
+
+    async function populateAPIResponse() {
+        setIsLoading(true);
+        try {
+            const response = await fetch('APITest/create-schema', {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    url: `${url}`,
+                }),
+            });
+
+            const data: ITypeObject = await response.json();
+            setFormat(data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    }
 
     const dropdown =
         <Menu as="div" className="relative inline-block text-left h-[45px] justify-center items-center mr-[4px]">
@@ -94,8 +120,8 @@ const CreateTestCase = () => {
         <div className='w-3/4'>
             {/* <label htmlFor="hs-search-box-with-loading-2" className="block text-sm font-medium dark:text-white">Search</label> */}
             <div className="flex rounded-lg shadow-sm  ring-gray-300">
-                <input type="text" id="hs-search-box-with-loading-2" name="hs-search-box-with-loading-2" className="py-3 px-4 block w-full border-gray-200 shadow-sm rounded-s-lg text-sm focus:z-10 focus:border-blue-500 focus:ring-blue-500 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-800 dark:placeholder-neutral-500 " placeholder="Input API" />
-                <button type="button" className="w-[2.875rem] h-[2.875rem] shrink-0 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-e-md border border-transparent bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:bg-indigo-800 disabled:opacity-50 disabled:pointer-events-none">
+                <input type="text" id="input-url" onChange={(e) => setUrl(e.target.value)} name="hs-search-box-with-loading-2" className="py-3 px-4 block w-full border-gray-200 shadow-sm rounded-s-lg text-sm focus:z-10 focus:border-indigo-500 focus:ring-indigo-500 disabled:opacity-50 disabled:pointer-events-none dark:text-neutral-800 dark:placeholder-neutral-500 " placeholder="Input API" />
+                <button type="button" onClick={populateAPIResponse} className="w-[2.875rem] h-[2.875rem] shrink-0 inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-e-md border border-transparent bg-indigo-600 text-white hover:bg-indigo-500 focus:outline-none focus-visible:outline-indigo-600 focus:bg-indigo-800 disabled:opacity-50 disabled:pointer-events-none">
                     {isLoading ? <span className="animate-spin inline-block size-4 border-[3px] border-current border-t-transparent text-white rounded-full" role="status" aria-label="loading">
                         <span className="sr-only">Loading...</span>
                     </span> : <ArrowRightCircleIcon className='size-8' />}
@@ -107,20 +133,31 @@ const CreateTestCase = () => {
         <div className='h-[70vh] flex'>
             <div className='bg-indigo-100 w-1/2 mr-1 rounded-md'>
                 <h1 className='text-1xl font-bold leading-7 text-gray-900 m-1'>Response Body</h1>
+                <div id="response-body-cont" className='bg-slate-100 mx-5 rounded-md h-[62vh] p-4'></div>
             </div>
             <div className='bg-indigo-100 w-1/2 ml-1 rounded-md'>
                 <h1 className='text-1xl font-bold leading-7 text-gray-900 m-1'>Format</h1>
+                <div id="response-format-cont" className='bg-slate-100 mx-5 rounded-md h-[62vh] p-4 overflow-y-auto text-left'>
+                    {isLoading ? (
+                        <p>Loading...</p>
+                    ) : (
+                        format && (
+                            <pre>{JSON.stringify(format.schema.properties, null, 2)}</pre>
+                        )
+                    )}
+                </div>
             </div>
         </div>;
 
     return (
+        props.option=="Create"?
         <>
             <div className='flex justify-center items-center h-[10vh]'>
                 {dropdown}
                 {input}
             </div>
             {display}
-        </>
+        </>:<></>
     )
 }
 
