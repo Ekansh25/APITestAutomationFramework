@@ -206,11 +206,11 @@ const CreateTestCase = (props: IInterfaceProps) => {
                     {isLoading ? (
                         <p>Loading...</p>
                     ) : (
-                        testData && format && (
+                        format && (
                             props.option=="Create"?
                             <pre>{JSON.stringify(format.expectedResponse, null, 2)}</pre>
                             :
-                            <pre>{JSON.stringify(testData?.responseBody, null, 2)}</pre>
+                            testData && <pre>{JSON.stringify(testData?.responseBody, null, 2)}</pre>
                         )
                     )}
                 </div>
@@ -221,11 +221,11 @@ const CreateTestCase = (props: IInterfaceProps) => {
                     {isLoading ? (
                         <p>Loading...</p>
                     ) : (
-                        testData && format && (
+                        format && (
                             props.option=="Create"?
                             <pre>{JSON.stringify(format.schema, null, 2)}</pre>
                             :
-                            <>
+                            testData && <>
                                 <pre>Status Code: {JSON.stringify(testData?.statusCode, null, 2)}</pre>
                                 <pre>Is Status Code Valid: {JSON.stringify(testData?.isStatusCodeValid, null, 2)}</pre>
                                 <pre>Error Messages: {JSON.stringify(testData?.errorMessages, null, 2)}</pre>
