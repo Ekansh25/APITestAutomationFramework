@@ -1,8 +1,8 @@
-import Header from './Header'
+import Header from './Header';
 import CreateTestCase from './CreateTestCase';
 import ExecuteTestCase from './ExecuteTestCase';
 import { useState } from 'react';
-import APIList from './APIList';
+import TestCasesList from './TestCasesList';
 
 export interface IInterfaceProps {
     option: string;
@@ -16,7 +16,7 @@ const LandingPage = () => {
             <Header option={selectedOption} setOption={setSelectedOption} />
             <CreateTestCase option={selectedOption} />
             <ExecuteTestCase option={selectedOption} />
-            <APIList option={selectedOption}/>
+            <TestCasesList option={selectedOption}/>
         </>
     )
 }

@@ -80,36 +80,6 @@ const CreateTestCase = (props: IInterfaceProps) => {
         }
     }
 
-    const schema = {
-        "count": {
-            "type": "integer"
-        },
-        "next": {
-            "type": "string"
-        },
-        "previous": {
-            "type": "null"
-        },
-        "results": {
-            "type": "array",
-            "items": {
-                "type": "object",
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "url": {
-                        "type": "string"
-                    }
-                },
-                "required": [
-                    "name",
-                    "url"
-                ]
-            }
-        }
-    };
-
     async function populateAPITest() {
         setIsLoading(true);
         try {
@@ -118,7 +88,7 @@ const CreateTestCase = (props: IInterfaceProps) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     url: `${url}`,
-                    schema: schema
+                    schema: format?.schema
                 }),
             });
 
