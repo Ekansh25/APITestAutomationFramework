@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IInterfaceProps } from "./LandingPage";
+import { IInterfaceProps } from "./types.interface";
 
 const TestCaseList = [
     {

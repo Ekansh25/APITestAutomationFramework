@@ -9,7 +9,7 @@ import {
     PencilIcon,
 } from '@heroicons/react/20/solid'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { IInterfaceProps } from './LandingPage'
+import { IInterfaceProps } from './types.interface'
 import { useEffect, useState } from 'react'
 
 export default function Example(props: IInterfaceProps) {
