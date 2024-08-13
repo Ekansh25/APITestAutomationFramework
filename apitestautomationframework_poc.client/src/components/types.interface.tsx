@@ -31,3 +31,11 @@ export interface ITypeTestData {
 export interface ITypeFormatWindow {
     bodyStructure: object;
 }
+
+export interface ITypeJsonFunctionPorp {
+    updated_src: object
+    name: string, //new var name
+    namespace: string[], //list, namespace indicating var location
+    new_value: object, //new variable value
+    existing_value: object, //existing variable value
+}

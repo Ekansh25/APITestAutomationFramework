@@ -132,7 +132,7 @@ const CreateTestCase = (props: IInterfaceProps) => {
                 </div>
             </div>
             <div className='bg-indigo-100 w-1/2 ml-1 rounded-md'>
-                <h1 className='text-1xl font-bold leading-7 text-gray-900 m-1'>Format</h1>
+                <h1 className='text-1xl font-bold leading-7 text-gray-900 m-1'>Test Cases</h1>
                 <div id="response-format-cont" className='bg-slate-100 mx-5 rounded-md h-[62vh] p-4 overflow-y-auto text-left'>
                     {isLoading ? (
                         <p>Loading...</p>
