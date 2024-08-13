@@ -2,8 +2,6 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDownIcon, ArrowRightCircleIcon } from '@heroicons/react/20/solid'
 import { useEffect, useState } from 'react';
 import { IInterfaceProps, ITypeTestData } from './types.interface';
-//type Props = {}
-
 
 const ExecuteTestCase = (props: IInterfaceProps) => {
 
@@ -12,7 +10,6 @@ const ExecuteTestCase = (props: IInterfaceProps) => {
     const [url, setUrl] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [testData, setTestData] = useState<ITypeTestData | null>(null);
-    //const url = "http://localhost:5066/WeatherForecast/pokemon-list";
 
     useEffect(() => {
         switch (selectedType) {
@@ -137,36 +134,40 @@ const ExecuteTestCase = (props: IInterfaceProps) => {
                 </div>
             </div>
             <div className='bg-indigo-100 w-1/2 ml-1 rounded-md'>
-                <h1 className='text-1xl font-bold leading-7 text-gray-900 m-1'>{props.option == "Execute" ? "Test Results" : "Format"}</h1>
+                <h1 className='text-1xl font-bold leading-7 text-gray-900 m-1'>Test Results</h1>
                 <div id="response-format-cont" className='bg-slate-100 mx-5 rounded-md h-[62vh] p-4 overflow-y-auto text-left'>
                     {isLoading ? (
                         <p>Loading...</p>
                     ) : (
                         testData && <>
                             <div className='flex my-2 font-mono'>
-                                {testData.isStatusCodeValid ? passBadge: failBadge}
+                                {testData.isStatusCodeValid ? passBadge : failBadge}
                                 <pre className='ml-2'>Status Code: {JSON.stringify(testData?.statusCode, null, 2)}</pre>
                             </div>
                             <div className='flex my-2 font-mono'>
-                                {testData.isResponseBodyValid ? passBadge: failBadge}
-                                {testData.isResponseBodyValid ? <div className='ml-2'>Response Body Valid</div>: <div className='ml-2'>Response Body Invalid</div>}
+                                {testData.isResponseBodyValid ? passBadge : failBadge}
+                                {testData.isResponseBodyValid ? <div className='ml-2'>Response Body Valid</div> : <div className='ml-2'>Response Body Invalid</div>}
                             </div>
                             <div className='flex my-2 font-mono'>
-                                {testData.isResponseDataMatching ? passBadge: failBadge}
-                                <pre className='ml-2'>Miss Matched: {JSON.stringify(testData?.mismatchDetails, null, 2)}</pre>
+                                {testData.isResponseDataMatching ? passBadge : failBadge}
+                                {testData.isResponseDataMatching ? (<div className='ml-2'>Response Body Data is Matching</div>) : <div className='ml-2'>Response Body Data is not Matching</div>}
                             </div>
+                            {!testData.isResponseDataMatching && <div className='font-mono bg-white rounded-md p-2'>
+                                Miss Matched:
+                                <pre className='ml-2 text-sm'>{JSON.stringify(testData?.mismatchDetails, null, 2)}</pre>
+                            </div>}
                             <div className='flex my-2 font-mono'>
-                            {testData.isResponseBodyStructureValid ? passBadge: failBadge}
-                            {testData.isResponseBodyStructureValid?(<div className='ml-2'>Response Body structure is valid</div>):<div className='ml-2'>Response Body structure is Invalid</div>}
+                                {testData.isResponseBodyStructureValid ? passBadge : failBadge}
+                                {testData.isResponseBodyStructureValid ? (<div className='ml-2'>Response Body structure is valid</div>) : <div className='ml-2'>Response Body structure is Invalid</div>}
                             </div>
-                            <div className='font-mono'>
-                                Error Message:
+                            {!testData.isResponseBodyStructureValid && <div className='font-mono bg-white rounded-md p-2'>
+                                Structure Invalid at:
                                 <ul>
-                                {(testData.errorMessages.map((msg)=>(
-                                    <li className='ml-2 text-sm'>{JSON.stringify(msg, null, 2)}</li>
-                                )))}
+                                    {(testData.errorMessages.map((msg) => (
+                                        <li className='ml-2 text-sm'>{JSON.stringify(msg, null, 2)}</li>
+                                    )))}
                                 </ul>
-                            </div>
+                            </div>}
                         </>
                     )}
                 </div>

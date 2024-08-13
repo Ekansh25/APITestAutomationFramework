@@ -27,3 +27,7 @@ export interface ITypeTestData {
     isResponseDataMatching: boolean;
     mismatchDetails: object;
 }
+
+export interface ITypeFormatWindow {
+    bodyStructure: object;
+}

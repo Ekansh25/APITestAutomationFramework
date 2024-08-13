@@ -2,6 +2,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDownIcon, ArrowRightCircleIcon } from '@heroicons/react/20/solid'
 import { useEffect, useState } from 'react';
 import { IInterfaceProps, ITypeObject } from './types.interface';
+import FormatWindow from './FormatWindow';
 
 
 const CreateTestCase = (props: IInterfaceProps) => {
@@ -9,7 +10,6 @@ const CreateTestCase = (props: IInterfaceProps) => {
     const [colorClass, setColorClass] = useState<string>("");
     const [url, setUrl] = useState<string>("");
     const [isLoading, setIsLoading] = useState<boolean>(false);
-    //const url = "http://localhost:5066/WeatherForecast/pokemon-list";
 
     useEffect(() => {
         switch (selectedType) {
@@ -132,13 +132,16 @@ const CreateTestCase = (props: IInterfaceProps) => {
                 </div>
             </div>
             <div className='bg-indigo-100 w-1/2 ml-1 rounded-md'>
-                <h1 className='text-1xl font-bold leading-7 text-gray-900 m-1'>{props.option=="Execute"?"Test Results":"Format"}</h1>
+                <h1 className='text-1xl font-bold leading-7 text-gray-900 m-1'>Format</h1>
                 <div id="response-format-cont" className='bg-slate-100 mx-5 rounded-md h-[62vh] p-4 overflow-y-auto text-left'>
                     {isLoading ? (
                         <p>Loading...</p>
                     ) : (
                         props.format && (
-                            <pre>{JSON.stringify(props.format.schema, null, 2)}</pre>
+                            <>
+                                <FormatWindow bodyStructure={props.format.schema}/>
+                                {/* <pre>{JSON.stringify(props.format.schema, null, 2)}</pre> */}
+                            </>
                         )
                     )}
                 </div>
@@ -146,14 +149,14 @@ const CreateTestCase = (props: IInterfaceProps) => {
         </div>;
 
     return (
-        props.option == "Create"?
-        <>
-            <div className='flex justify-center items-center h-[10vh]'>
-                {dropdown}
-                {input}
-            </div>
-            {display}
-        </>:<></>
+        props.option == "Create" ?
+            <>
+                <div className='flex justify-center items-center h-[10vh]'>
+                    {dropdown}
+                    {input}
+                </div>
+                {display}
+            </> : <></>
     )
 }
 
